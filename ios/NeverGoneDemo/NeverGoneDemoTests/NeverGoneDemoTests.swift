@@ -18,19 +18,46 @@ final class NeverGoneDemoTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    func testChatMessageInitialization() {
+        let id = UUID()
+        let sessionId = UUID()
+        let authorId = UUID()
+        let content = "Hello, world!"
+        let now = Date()
+        
+        let message = ChatMessage(
+            id: id,
+            sessionId: sessionId,
+            authorId: authorId,
+            content: content,
+            role: .user,
+            createdAt: now
+        )
+        
+        XCTAssertEqual(message.id, id)
+        XCTAssertEqual(message.content, content)
+        XCTAssertEqual(message.role, .user)
     }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    
+    func testChatMessageJSONDecoding() throws {
+        let json = """
+        {
+            "id": "\(UUID().uuidString)",
+            "session_id": "\(UUID().uuidString)",
+            "author_id": "\(UUID().uuidString)",
+            "content": "Test content",
+            "role": "assistant",
+            "created_at": "2024-02-04T12:00:00Z"
         }
+        """.data(using: .utf8)!
+        
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        let message = try decoder.decode(ChatMessage.self, from: json)
+        
+        XCTAssertEqual(message.content, "Test content")
+        XCTAssertEqual(message.role, .assistant)
     }
 
 }

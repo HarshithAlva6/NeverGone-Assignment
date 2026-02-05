@@ -1,19 +1,23 @@
 # NeverGoneDemo Backend (Supabase) ☁️
 
-This directory contains the Supabase project configuration and Edge Functions that power the AI chat capabilities.
+This directory contains the Supabase project configuration and Edge Functions
+that power the AI chat capabilities.
 
 ## 📂 Functions
 
 ### 1. `chat_stream`
+
 - **Path**: `supabase/functions/chat_stream/index.ts`
 - **Purpose**: Handles real-time chat interactions.
 - **Key Logic**:
   - Receives user message.
   - Calls **Google Gemini API (gemini-2.5-flash)** with streaming enabled.
-  - Pipes the streaming response directly to the client as Server-Sent Events (SSE).
+  - Pipes the streaming response directly to the client as Server-Sent Events
+    (SSE).
   - Persists both user and assistant messages to the database.
 
 ### 2. `summarize_memory`
+
 - **Path**: `supabase/functions/summarize_memory/index.ts`
 - **Purpose**: Generates concise session summaries.
 - **Key Logic**:
@@ -27,10 +31,12 @@ This directory contains the Supabase project configuration and Edge Functions th
 ## 🛠 Local Development & Deployment
 
 ### Prerequisites
+
 - [Supabase CLI](https://supabase.com/docs/guides/cli) installed.
 - Docker (for local testing).
 
 ### Deployment
+
 To deploy these functions to the linked Supabase project:
 
 ```bash
@@ -43,16 +49,32 @@ npx supabase functions deploy summarize_memory
 ```
 
 ### Configuration (Secrets)
-The functions rely on the following secrets being set in the Supabase Dashboard or via CLI:
+
+The functions rely on the following secrets being set in the Supabase Dashboard
+or via CLI:
 
 ```bash
 npx supabase secrets set GEMINI_API_KEY="AIzaSy..."
 ```
 
-*(Note: `SUPABASE_URL` and `SUPABASE_ANON_KEY` are auto-injected)*
+_(Note: `SUPABASE_URL` and `SUPABASE_ANON_KEY` are auto-injected)_
+
+---
+
+## 🧪 Testing
+
+To run the backend utility tests, ensure you have [Deno](https://deno.land/)
+installed and run:
+
+```bash
+cd supabase/functions/chat_stream
+deno test utils_test.ts
+```
 
 ---
 
 ## 🧠 AI Model
+
 - **Model**: `gemini-2.5-flash`
-- **Reasoning**: Chosen for its extremely low latency and high tokens-per-second, which is ideal for real-time chat streaming.
+- **Reasoning**: Chosen for its extremely low latency and high
+  tokens-per-second, which is ideal for real-time chat streaming.
