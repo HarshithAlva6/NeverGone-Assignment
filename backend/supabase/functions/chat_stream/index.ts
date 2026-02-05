@@ -114,7 +114,8 @@ serve(async (req) => {
               session_id,
               author_id: user.id,
               content: currentResponse.trim(),
-              role: 'assistant'
+              role: 'assistant',
+              prompt_version: 'gemini-2.5-flash-v1'
             })
         }
 

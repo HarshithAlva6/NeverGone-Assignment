@@ -20,6 +20,7 @@ CREATE TABLE chat_messages (
   author_id UUID REFERENCES auth.users NOT NULL DEFAULT auth.uid(),
   content TEXT NOT NULL,
   role TEXT CHECK (role IN ('user', 'assistant')),
+  prompt_version TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
 
