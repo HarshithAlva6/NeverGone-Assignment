@@ -170,6 +170,11 @@ your own **Supabase Cloud** project (No Docker required).
    `ios/NeverGoneDemo/NeverGoneDemo/Utilities/Constants.swift` with your
    Supabase URL and Anon Key.
 3. **Run**: Select an iPhone simulator and press **Cmd + R**.
+4. **Auth**: Sign up/Sign in with any email. Authentication is handled entirely
+   by Supabase Auth (whether running locally or on the cloud).
+5. **Streaming**: To trigger a response, simply type a message (e.g., "Hello")
+   in the chat and hit send. The assistant will begin streaming a real-time
+   response using Gemini.
 
 ---
 
@@ -227,8 +232,15 @@ your own **Supabase Cloud** project (No Docker required).
 
 ## Notes
 
-- **Gemini 2.5 Flash**: Chosen for ultra-low latency streaming. The `flash-lite`
-  model is the default to ensure high rate limits during your evaluation.
-- **Safety**: Graceful fallback to simulated streaming if API keys are missing.
+- **Configurable AI Models**: I made the `GEMINI_MODEL` an environment variable
+  to allow for easy switching between model tiers.
+  - **Why?**: The Gemini Free Tier has strict rate limits.
+    `gemini-2.5-flash-lite` is the default because it offers the highest rate
+    limits (60 RPM) for a smooth evaluation experience, but it can be swapped
+    for `gemini-2.5-flash` or `gemini-2.5-pro` if higher reasoning quality is
+    preferred.
+- **Safety**: Includes a graceful fallback to a simulated stream if the Gemini
+  API is unavailable or rate-limited, ensuring the app remains functional for
+  the reviewer.
 
 Good luck — I'm excited for you to see this in action!
