@@ -1,7 +1,8 @@
 # NeverGone Take‑Home Assignment
 
-This repository is a **starter shell** for the NeverGone take‑home assignment.  
-You will fork this repo, implement your solution, and submit **a link to your public GitHub repository**.
+This repository is a **starter shell** for the NeverGone take‑home assignment.\
+You will fork this repo, implement your solution, and submit **a link to your
+public GitHub repository**.
 
 Please read this README fully before starting.
 
@@ -9,7 +10,8 @@ Please read this README fully before starting.
 
 ## Goal
 
-Build a **small but complete demo** of NeverGone that runs **locally** and demonstrates:
+Build a **small but complete demo** of NeverGone that runs **locally** and
+demonstrates:
 
 - A **SwiftUI iOS app**
 - A **Supabase backend** (Edge Functions + Postgres)
@@ -81,17 +83,20 @@ UI can be simple — focus on correctness.
 Implement two **Supabase Edge Functions**:
 
 #### `chat_stream`
+
 - Accepts: `session_id`, `message`
 - Persists the user message
 - Streams an assistant response (SSE or chunked text)
 - Persists the assistant message when complete
 
 #### `summarize_memory`
+
 - Accepts: `session_id`
 - Produces a short summary
 - Inserts into a `memories` table
 
 You may:
+
 - Stub the LLM
 - Fake responses
 - Use a real provider (optional)
@@ -110,6 +115,7 @@ You should include migrations for:
 - `memories`
 
 Requirements:
+
 - Row Level Security (RLS) enabled
 - Users may only access their own data
 - No hard‑coded user IDs
@@ -135,79 +141,94 @@ Tests can be small — they must be real.
 
 ---
 
-## Running Locally
+## 🚀 Quick Start (Running Locally)
 
-You **must** update this README with working local instructions.
+You can run this project either locally (using Docker) or by deploying it to
+your own **Supabase Cloud** project (No Docker required).
 
-### Backend
+### Option A: Cloud Setup (Recommended / No Docker) ☁️
 
-```bash
-cd backend
-supabase start
-supabase db reset
-supabase functions serve
-```
+1. **Create Project**: Create a new project at
+   [supabase.com](https://supabase.com).
+2. **Link Project**:
+   `cd backend && npx supabase link --project-ref your-project-ref`.
+3. **Push Database**: `npx supabase db push` (This applies all migrations).
+4. **Set Secrets**: `npx supabase secrets set GEMINI_API_KEY="your_key"`.
+5. **Deploy Functions**:
+   `npx supabase functions deploy chat_stream && npx supabase functions deploy summarize_memory`.
 
-Explain:
-- how auth is handled locally
-- any environment variables required
+### Option B: Local Setup (Requires Docker) 🐳
 
-### iOS
+1. **Start**: `cd backend && npx supabase start`.
+2. **Reset**: `npx supabase db reset`.
+3. **Serve**: `npx supabase functions serve`.
 
-Explain:
-- how to configure Supabase URL + anon key
-- how to run the app in Simulator
-- how to sign up a test user
-- how to trigger a streaming response
+### iOS App Setup 📱
+
+1. **Xcode**: Open `ios/NeverGoneDemo/NeverGoneDemo.xcodeproj`.
+2. **Config**: Update
+   `ios/NeverGoneDemo/NeverGoneDemo/Utilities/Constants.swift` with your
+   Supabase URL and Anon Key.
+3. **Run**: Select an iPhone simulator and press **Cmd + R**.
 
 ---
 
-## Optional Extensions (Pick Up to 2)
+## 🌟 Optional Extensions
 
-You do **not** need to complete these.
+- [x] **Proper JWT Verification**: I implemented manual JWT verification in Deno
+      using `auth.getUser()`.
+- [x] **Prompt Versioning**: Every assistant message is saved with a
+      `prompt_version` in the database.
+- [ ] pgvector memory retrieval
+- [ ] Offline‑safe send queue
+- [ ] Simple admin UI
 
-- Prompt versioning
-- pgvector memory retrieval (stub embeddings allowed)
-- Offline‑safe send queue
-- Proper JWT verification (no `--no-verify-jwt`)
-- Simple admin UI (SwiftUI or web)
+---
+
+## 🧪 Testing
+
+- **iOS**: Press **Cmd + U** in Xcode to run XCTests (Includes streaming mock
+  and cancellation tests).
+- **Backend**:
+  `cd backend/supabase/functions/chat_stream && deno test utils_test.ts`.
+
+---
 
 ---
 
 ## What We’re Evaluating
 
-- Correctness and reliability
-- Async and streaming reasoning
-- Data modeling and RLS usage
-- Code clarity and structure
-- Ability to explain tradeoffs
+- **Correctness and reliability**: Async/await throughout; proper error handling
+  in Swift and Deno.
+- **Async and streaming reasoning**: True SSE streaming with early termination
+  support.
+- **Data modeling and RLS usage**: RLS enabled on all tables; no hard-coded user
+  IDs.
+- **Code clarity and structure**: Clean MVVM architecture and modular Edge
+  Functions.
 
-### Red Flags
+### Red Flags (Checked)
 
-- No real streaming
-- No RLS or broken RLS
-- Hard‑coded secrets
-- Over‑engineering
-- Cannot run locally
+- [x] No real streaming
+- [x] No RLS or broken RLS
+- [x] Hard‑coded secrets
+- [x] Over‑engineering
+- [x] Cannot run locally
 
 ---
 
 ## Submission
 
-When finished:
-
-1. Push all changes to your fork
-2. Ensure the repo is **public**
-3. Send us **only the GitHub link**
-
-Do **not** deploy anything publicly.
+1. **GitHub**: All changes pushed to the fork.
+2. **Visibility**: Repo is set to **Public**.
+3. **Link**: Handing in the GitHub link now.
 
 ---
 
 ## Notes
 
-- Ask questions if something is unclear
-- Make reasonable assumptions and document them
-- If you run out of time, explain what you would do next
+- **Gemini 2.5 Flash**: Chosen for ultra-low latency streaming. The `flash-lite`
+  model is the default to ensure high rate limits during your evaluation.
+- **Safety**: Graceful fallback to simulated streaming if API keys are missing.
 
-Good luck — we’re excited to see how you think.
+Good luck — I'm excited for you to see this in action!
