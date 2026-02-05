@@ -23,7 +23,9 @@ class ChatListViewModel: ObservableObject {
     func createSession() async {
         isLoading = true
         do {
-            let session = try await chatService.createSession()
+            let sessionNumber = sessions.count + 1
+            let title = "Chat #\(sessionNumber)"
+            let session = try await chatService.createSession(title: title)
             sessions.insert(session, at: 0)
         } catch {
             errorMessage = error.localizedDescription

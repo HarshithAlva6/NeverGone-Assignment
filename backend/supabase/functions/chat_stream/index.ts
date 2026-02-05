@@ -48,11 +48,11 @@ serve(async (req) => {
         let currentResponse = ""
         let usedGemini = false
         const geminiKey = Deno.env.get('GEMINI_API_KEY')
+        const geminiModel = Deno.env.get('GEMINI_MODEL') || 'gemini-2.5-flash-lite'
 
         if (geminiKey) {
           try {
-            // Using Gemini 2.5 Flash with System Instruction
-            const geminiResp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:streamGenerateContent?key=${geminiKey}`, {
+            const geminiResp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${geminiModel}:streamGenerateContent?key=${geminiKey}`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({

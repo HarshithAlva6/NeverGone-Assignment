@@ -1,0 +1,30 @@
+# Environment files with actual secrets
+.env
+*.env
+!.env.example
+
+# dotenvx
+.env.keys
+.env.local
+.env.*.local
+
+# Xcode
+*.xcuserstate
+xcuserdata/
+**/xcuserdata/
+DerivedData/
+*.xcworkspace/xcuserdata/
+project.xcworkspace/xcuserdata/
+xcschemes/xcschememanagement.plist
+build/
+
+# macOS
+.DS_Store
+
+# Node
+node_modules/
+
+# Supabase local
+.supabase/
+.branches
+.temp

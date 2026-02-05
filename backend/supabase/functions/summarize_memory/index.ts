@@ -51,12 +51,13 @@ serve(async (req) => {
     if (messages && messages.length > 0) {
       const conversationText = messages.map(m => `${m.role}: ${m.content}`).join("\n")
       const geminiKey = Deno.env.get('GEMINI_API_KEY')
+      const geminiModel = Deno.env.get('GEMINI_MODEL') || 'gemini-2.5-flash-lite'
 
       if (geminiKey) {
         try {
           const prompt = `Summarize the following chat conversation in 2-3 concise sentences safely. Capture the key topics discussed:\n\n${conversationText}`
 
-          const geminiResp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`, {
+          const geminiResp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${geminiModel}:generateContent?key=${geminiKey}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })

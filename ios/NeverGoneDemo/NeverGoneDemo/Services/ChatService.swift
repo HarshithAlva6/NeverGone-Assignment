@@ -112,6 +112,7 @@ class ChatService {
         ]
         
         request.httpBody = try JSONEncoder().encode(body)
+        request.timeoutInterval = 60
         
         let (data, response) = try await URLSession.shared.data(for: request)
         
